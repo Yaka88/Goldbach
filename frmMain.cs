@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -10,7 +11,8 @@ namespace Goldbach
 {
     public partial class frmMain : Form
     {
-        bool[] intPrimeCol;
+        //bool[] intPrimeCol; 
+        BitArray intPrimeCol;
         int intNoBase = 6;
         //
         /*  struct PPData
@@ -52,7 +54,8 @@ namespace Goldbach
             int intSqrtEven = (int)Math.Sqrt(intEven);
             int intCount = 0;
             richTextPrimePair.Text = "";
-            intPrimeCol = new bool[intEven];
+            //intPrimeCol = new bool[intEven]; 
+            intPrimeCol = new BitArray(intEven); 
             //StringBuilder strPrimeCol = new StringBuilder();
             richTextPrime.Clear();
             richTextPrime.AppendText(" 01\t");
@@ -65,8 +68,8 @@ namespace Goldbach
                     if (i <= intSqrtEven)
                     {
                         int istep = i << 1;
-                        for (int j = i * i; j < intEven; j = j + istep)//for (int j = i << 1; j < intEven; j = j + i)
-                            intPrimeCol[j] = true;
+                        for (long j = i * i; j < intEven; j = j + istep)//for (int j = i << 1; j < intEven; j = j + i)
+                            intPrimeCol[(int)j] = true;
                     }
                 }
 
