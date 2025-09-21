@@ -12,14 +12,14 @@ namespace Goldbach
     public partial class frmMain : Form
     {
         //bool[] intPrimeCol; 
-        BitArray intPrimeCol;
-        int intNoBase = 6;
+        BitArray intPrimeCol; // Prime number collection using BitArray for memory efficiency
+        int intNoBase = 6; // Number base: 6 for senary, 10 for decimal
         //
-        /*  struct PPData
+        /*  struct PPData - Prime Pair Data structure (commented out)
           {
-              public int Even;
-              public int PPNumber;
-              public List<int> PrimePair;
+              public int Even;      // Even number
+              public int PPNumber;  // Prime Pair count
+              public List<int> PrimePair; // List of prime pairs
           }*/
 
         public frmMain()
@@ -27,52 +27,57 @@ namespace Goldbach
             InitializeComponent();
         }
 
-        string ToSenary(int intNumber)   //  to base 6
+        string ToSenary(int intNumber)   //  Convert integer to base 6 (senary)
         {
             if (intNumber < intNoBase)
                 return intNumber.ToString("00");
             StringBuilder strNumber = new StringBuilder("");
             while (intNumber > 0)
             {
-                strNumber.Insert(0,intNumber % intNoBase); // 1
-                intNumber /= intNoBase;
+                strNumber.Insert(0,intNumber % intNoBase); // Get remainder for current digit
+                intNumber /= intNoBase; // Integer division for next digit
             }
             return strNumber.ToString();
         }
-        int ParseSenary(string strNumber)
+        int ParseSenary(string strNumber) // Parse senary (base-6) string to integer
         {
             int intNumber = 0;
             for(int i = 0; i < strNumber.Length; i++)
             {
-                intNumber = intNumber * intNoBase + strNumber[i] - 48;
+                intNumber = intNumber * intNoBase + strNumber[i] - 48; // 48 is ASCII '0'
             }
             return intNumber;
         }
         private void btnPrime_Click(object sender, EventArgs e)
         {
+            // Parse input number (either senary or decimal based on checkbox)
             int intEven =  checkBox1.Checked? ParseSenary(txtNumber.Text):int.Parse(txtNumber.Text);
             int intSqrtEven = (int)Math.Sqrt(intEven);
             int intCount = 0;
             richTextPrimePair.Text = "";
             //intPrimeCol = new bool[intEven]; 
-            intPrimeCol = new BitArray(intEven); 
+            intPrimeCol = new BitArray(intEven); // BitArray for memory efficiency
             //StringBuilder strPrimeCol = new StringBuilder();
             richTextPrime.Clear();
             richTextPrime.AppendText(" 01\t");
-            DateTime dtStart = DateTime.Now;
-            for(int i = 3; i < intEven; i=i+2)
+            DateTime dtStart = DateTime.Now; // Start timing
+            
+            // Sieve of Eratosthenes algorithm - optimized for odd numbers only
+            for(int i = 3; i < intEven; i=i+2) // Skip even numbers (except 2)
             {
-                if (intPrimeCol[i] == false)  //false means Prime
+                if (intPrimeCol[i] == false)  // false means Prime (true means composite)
                 {
                     intCount++;
-                    if (i <= intSqrtEven)
+                    if (i <= intSqrtEven) // Only need to sieve up to sqrt(n)
                     {
-                        int istep = i << 1;
-                        for (long j = i * i; j < intEven; j = j + istep)//for (int j = i << 1; j < intEven; j = j + i)
-                            intPrimeCol[(int)j] = true;
+                        int istep = i << 1; // Step by 2*i to skip even multiples
+                        // Mark multiples of i as composite, starting from i²
+                        for (long j = i * i; j < intEven; j = j + istep)
+                            intPrimeCol[(int)j] = true; // Mark as composite
                     }
                 }
 
+                // Display primes (limited to save time)
                 if (intCount < byte.MaxValue) //save time
                 {   
                     if (checkBox1.Checked)
@@ -83,12 +88,13 @@ namespace Goldbach
                     }
                     if (i % intNoBase == 1)
                         richTextPrime.AppendText("\n ");
+                    // Color coding: Red for primes, Black for composite
                     richTextPrime.SelectionColor = intPrimeCol[i] ? Color.Black : Color.Red;
-                    //richTextPrime.AppendText(ToSenary(i));
                     richTextPrime.AppendText(checkBox1.Checked?ToSenary(i):i.ToString("00"));
                     richTextPrime.AppendText("\t");
                 }
             }
+            // Display timing and count results
             txtTime.Text = (DateTime.Now - dtStart).TotalMilliseconds.ToString("N4");
             txtCount.Text = intCount.ToString();
            // richTextPrime.Text = strPrimeCol.ToString(); 
@@ -131,7 +137,7 @@ namespace Goldbach
             richTextPrimePair.Text = strEvenCol.ToString();
             DecideExcludePP(ref intEvenCol);
         }
-        void DecideExcludePP(ref int[] intEvenCol)//例外pp数
+        void DecideExcludePP(ref int[] intEvenCol)//例外pp数 (Exception prime pair numbers)
         {
             int intEven = intPrimeCol.Length;
             int intBase = 2, intStep = 2, intBaseIndex = 0;// int intBase = 2
@@ -177,7 +183,7 @@ namespace Goldbach
             }
             return false;
         }
-        void DecideSucceedPP()   //PP对小质数 + intBase 仍可构成PP对
+        void DecideSucceedPP()   //PP对小质数 + intBase 仍可构成PP对 (PP pairs: small prime + intBase can still form PP pairs)
         {
             int intBase = 6; //  2*3*5*7*11
             
