@@ -16,6 +16,17 @@ For example:
 - 10 = 3 + 7 = 5 + 5
 - 12 = 5 + 7
 
+## Quick Start
+
+1. **Clone the repository**: `git clone https://github.com/Yaka88/Goldbach.git`
+2. **Open in Visual Studio**: Load `Goldbach.csproj`
+3. **Build and Run**: Press F5 to compile and launch
+4. **Basic Usage**:
+   - Enter `100` in the "Even:" field
+   - Click "Prime Collection" to generate primes
+   - Click "Even Collection" to see Goldbach analysis
+   - Explore the colorized prime display and analysis results
+
 ## Project Functionality
 
 This application provides several tools to explore and test the Goldbach Conjecture:
@@ -136,6 +147,21 @@ This application serves as an excellent tool for:
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.txt](LICENSE.txt) file for details.
+
+## Additional Resources
+
+- **[USER_GUIDE.md](USER_GUIDE.md)**: Detailed step-by-step usage instructions
+- **[CODE_DOCUMENTATION.md](CODE_DOCUMENTATION.md)**: Technical implementation details and API reference
+- **[LICENSE.txt](LICENSE.txt)**: GNU GPL v3.0 license terms
+
+## Contributing
+
+This project welcomes contributions! Areas of interest include:
+- Performance optimizations for larger number ranges
+- Additional mathematical analysis features
+- UI/UX improvements
+- Documentation enhancements
+- Cross-platform support (WPF, Avalonia, etc.)
 
 ## Mathematical Background
 
